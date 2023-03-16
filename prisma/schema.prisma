@@ -22,9 +22,6 @@ model Task {
     title       String
     description String
     completed   Boolean
-    nextId      String? @unique
-    next        Task?   @relation(name: "TaskList", fields: [nextId], references: [id])
-    previous    Task?   @relation("TaskList")
     user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
