@@ -2,9 +2,11 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import SignIn from "~/components/signin";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const NewTaskPage: NextPage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   if (session) {
     return (
       <div className="flex items-center justify-center">
@@ -28,6 +30,7 @@ const NewTaskPage: NextPage = () => {
                 },
               }
             );
+            void router.push('/tasks');
           }}
         >
           <div>

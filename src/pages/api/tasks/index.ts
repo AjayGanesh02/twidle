@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
 import { z } from "zod";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "~/server/auth";
 
 const taskSchema = z.object({
   title: z.string(),
@@ -12,12 +13,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (session) {
     if (req.method == "GET") {
       const tasks = await prisma.task.findMany({
         where: {
           userId: session?.user?.id,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
 
@@ -35,10 +39,12 @@ export default async function handler(
           },
         });
 
-        return res.status(200).json(task);
+        return res.status(201).json(task);
       }
+    } else {
+      return res.status(405).json({ Error: "Method not allowed" });
     }
-  } else { 
+  } else {
     res.status(401).send({ message: "Unauthorized" });
   }
 }

@@ -1,6 +1,7 @@
 import type { Task } from "@prisma/client";
 import type { NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import SignIn from "~/components/signin";
 import TaskDashboard from "~/components/taskdashboard";
@@ -24,11 +25,14 @@ const TasksPage: NextPage = () => {
       <>
         Signed in as {session.user.email} <br />
         <button onClick={() => void signOut()}>Sign out</button>
+        <div>
+          <Link href="/tasks/new">Add A task</Link>
+        </div>
         <TaskDashboard tasks={tasks} />
       </>
     );
   } else {
-    return <SignIn/>
+    return <SignIn />;
   }
 };
 
