@@ -1,4 +1,4 @@
-import { Task } from "@prisma/client";
+import type { Task } from "@prisma/client";
 import axios from "axios";
 
 export default function TaskDashboard({ tasks }: { tasks: Task[] }) {
